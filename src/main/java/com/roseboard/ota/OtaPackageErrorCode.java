@@ -1,0 +1,16 @@
+package com.roseboard.ota;
+
+public enum OtaPackageErrorCode {
+    UNKNOWN_KIND,
+    DUPLICATE_PACKAGE,
+    INVALID_PROFILE,
+    INVALID_REQUEST,
+    NOT_FOUND,
+    IMMUTABLE_FIELD,
+    CHECKSUM_MISMATCH,
+    UPLOAD_FAILED,
+    QUOTA_EXCEEDED,
+    INVALID_URL,
+    NOT_DOWNLOADABLE,
+    CONFLICT
+}

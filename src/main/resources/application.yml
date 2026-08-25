@@ -1,0 +1,151 @@
+spring:
+  application:
+    name: roseboard
+  datasource:
+    url: ${ROSEBOARD_DATABASE_URL:jdbc:postgresql://localhost:5432/roseboard?currentSchema=roseboard}
+    username: ${ROSEBOARD_DATABASE_USERNAME:roseboard}
+    password: ${ROSEBOARD_DATABASE_PASSWORD:roseboard}
+    hikari:
+      schema: roseboard
+  flyway:
+    enabled: true
+    default-schema: roseboard
+    schemas: roseboard
+    locations: classpath:db/migration
+  data:
+    redis:
+      host: ${ROSEBOARD_REDIS_HOST:localhost}
+      port: ${ROSEBOARD_REDIS_PORT:6379}
+  mail:
+    host: ${ROSEBOARD_MAIL_HOST:localhost}
+    port: ${ROSEBOARD_MAIL_PORT:1025}
+    username: ${ROSEBOARD_MAIL_USERNAME:}
+    password: ${ROSEBOARD_MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  forward-headers-strategy: ${SERVER_FORWARD_HEADERS_STRATEGY:none}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+roseboard:
+  security:
+    mfa:
+      enabled: ${ROSEBOARD_MFA_ENABLED:true}
+    oauth2:
+      enabled: ${ROSEBOARD_OAUTH2_ENABLED:false}
+  cache:
+    backend: ${ROSEBOARD_CACHE_BACKEND:caffeine}
+    specs:
+      deviceCredentials:
+        enabled: ${ROSEBOARD_CACHE_DEVICE_CREDENTIALS_ENABLED:true}
+        time-to-live: ${ROSEBOARD_CACHE_DEVICE_CREDENTIALS_TTL:1440m}
+        max-size: ${ROSEBOARD_CACHE_DEVICE_CREDENTIALS_MAX_SIZE:10000}
+      devices:
+        enabled: ${ROSEBOARD_CACHE_DEVICES_ENABLED:true}
+        time-to-live: ${ROSEBOARD_CACHE_DEVICES_TTL:1440m}
+        max-size: ${ROSEBOARD_CACHE_DEVICES_MAX_SIZE:10000}
+      deviceProfiles:
+        enabled: ${ROSEBOARD_CACHE_DEVICE_PROFILES_ENABLED:true}
+        time-to-live: ${ROSEBOARD_CACHE_DEVICE_PROFILES_TTL:1440m}
+        max-size: ${ROSEBOARD_CACHE_DEVICE_PROFILES_MAX_SIZE:10000}
+      attributes:
+        enabled: ${ROSEBOARD_CACHE_ATTRIBUTES_ENABLED:true}
+        time-to-live: ${ROSEBOARD_CACHE_ATTRIBUTES_TTL:1440m}
+        max-size: ${ROSEBOARD_CACHE_ATTRIBUTES_MAX_SIZE:100000}
+      tsLatest:
+        enabled: ${ROSEBOARD_CACHE_TS_LATEST_ENABLED:true}
+        time-to-live: ${ROSEBOARD_CACHE_TS_LATEST_TTL:1440m}
+        max-size: ${ROSEBOARD_CACHE_TS_LATEST_MAX_SIZE:100000}
+  cluster:
+    enabled: ${ROSEBOARD_CLUSTER_ENABLED:false}
+    node-id: ${ROSEBOARD_CLUSTER_NODE_ID:}
+    discovery-type: ${ROSEBOARD_CLUSTER_DISCOVERY_TYPE:memory}
+    discovery-key: ${ROSEBOARD_CLUSTER_DISCOVERY_KEY:roseboard:cluster:nodes}
+    node-ttl-seconds: ${ROSEBOARD_CLUSTER_NODE_TTL_SECONDS:15}
+    heartbeat-interval-ms: ${ROSEBOARD_CLUSTER_HEARTBEAT_INTERVAL_MS:3000}
+    recalculate-delay-ms: ${ROSEBOARD_CLUSTER_RECALCULATE_DELAY_MS:0}
+    assigned-partitions: []
+    zookeeper:
+      url: ${ROSEBOARD_CLUSTER_ZK_URL:localhost:2181}
+      root-dir: ${ROSEBOARD_CLUSTER_ZK_ROOT:/roseboard}
+      nodes-dir: ${ROSEBOARD_CLUSTER_ZK_NODES_DIR:/nodes}
+      transport-dir: ${ROSEBOARD_CLUSTER_ZK_TRANSPORT_DIR:/transport}
+      session-timeout-ms: ${ROSEBOARD_CLUSTER_ZK_SESSION_TIMEOUT_MS:3000}
+      connection-timeout-ms: ${ROSEBOARD_CLUSTER_ZK_CONNECTION_TIMEOUT_MS:3000}
+      retry-interval-ms: ${ROSEBOARD_CLUSTER_ZK_RETRY_INTERVAL_MS:3000}
+      max-retries: ${ROSEBOARD_CLUSTER_ZK_MAX_RETRIES:3}
+  audit:
+    enabled: ${ROSEBOARD_AUDIT_ENABLED:true}
+    metrics-enabled: ${ROSEBOARD_AUDIT_METRICS_ENABLED:true}
+    retention-days: ${ROSEBOARD_AUDIT_RETENTION_DAYS:0}
+    retention-cron: ${ROSEBOARD_AUDIT_RETENTION_CRON:0 0 3 * * *}
+  telemetry:
+    retention-ms: ${ROSEBOARD_TELEMETRY_RETENTION_MS:2592000000}
+    cleanup-batch-size: ${ROSEBOARD_TELEMETRY_CLEANUP_BATCH_SIZE:1000}
+  transport:
+    mqtt:
+      enabled: ${ROSEBOARD_MQTT_ENABLED:false}
+      bind-address: ${ROSEBOARD_MQTT_BIND_ADDRESS:0.0.0.0}
+      port: ${ROSEBOARD_MQTT_PORT:1883}
+      idle-timeout-ms: ${ROSEBOARD_MQTT_IDLE_TIMEOUT_MS:600000}
+      ssl:
+        enabled: ${ROSEBOARD_MQTT_SSL_ENABLED:false}
+        bind-address: ${ROSEBOARD_MQTT_SSL_BIND_ADDRESS:0.0.0.0}
+        port: ${ROSEBOARD_MQTT_SSL_PORT:8883}
+        protocol: ${ROSEBOARD_MQTT_SSL_PROTOCOL:TLS}
+        key-store: ${ROSEBOARD_MQTT_SSL_KEY_STORE:}
+        key-store-password: ${ROSEBOARD_MQTT_SSL_KEY_STORE_PASSWORD:}
+        key-store-type: ${ROSEBOARD_MQTT_SSL_KEY_STORE_TYPE:PKCS12}
+        key-password: ${ROSEBOARD_MQTT_SSL_KEY_PASSWORD:}
+      web-socket:
+        enabled: ${ROSEBOARD_MQTT_WS_ENABLED:false}
+        bind-address: ${ROSEBOARD_MQTT_WS_BIND_ADDRESS:0.0.0.0}
+        port: ${ROSEBOARD_MQTT_WS_PORT:8083}
+        path: ${ROSEBOARD_MQTT_WS_PATH:/mqtt}
+        ssl-enabled: ${ROSEBOARD_MQTT_WS_SSL_ENABLED:false}
+        ssl-port: ${ROSEBOARD_MQTT_WS_SSL_PORT:8084}
+    queue:
+      partitions: ${ROSEBOARD_TRANSPORT_QUEUE_PARTITIONS:10}
+      consumer-per-partition: ${ROSEBOARD_TRANSPORT_QUEUE_CONSUMER_PER_PARTITION:true}
+    cluster:
+      enabled: ${ROSEBOARD_TRANSPORT_CLUSTER_ENABLED:false}
+      node-id: ${ROSEBOARD_TRANSPORT_NODE_ID:}
+      discovery-type: ${ROSEBOARD_TRANSPORT_CLUSTER_DISCOVERY_TYPE:memory}
+      session-store: ${ROSEBOARD_TRANSPORT_CLUSTER_SESSION_STORE:memory}
+      discovery-key: ${ROSEBOARD_TRANSPORT_CLUSTER_DISCOVERY_KEY:roseboard:cluster:transport:nodes}
+      session-key-prefix: ${ROSEBOARD_TRANSPORT_CLUSTER_SESSION_KEY_PREFIX:roseboard:transport:session:}
+      node-ttl-seconds: ${ROSEBOARD_TRANSPORT_CLUSTER_NODE_TTL_SECONDS:15}
+      session-ttl-seconds: ${ROSEBOARD_TRANSPORT_CLUSTER_SESSION_TTL_SECONDS:900}
+      heartbeat-interval-ms: ${ROSEBOARD_TRANSPORT_CLUSTER_HEARTBEAT_INTERVAL_MS:3000}
+      recalculate-delay-ms: ${ROSEBOARD_TRANSPORT_CLUSTER_RECALCULATE_DELAY_MS:0}
+      assigned-partitions: []
+      zookeeper:
+        url: ${ROSEBOARD_TRANSPORT_CLUSTER_ZK_URL:localhost:2181}
+        root-dir: ${ROSEBOARD_TRANSPORT_CLUSTER_ZK_ROOT:/roseboard}
+        transport-dir: ${ROSEBOARD_TRANSPORT_CLUSTER_ZK_TRANSPORT_DIR:/transport}
+        session-timeout-ms: ${ROSEBOARD_TRANSPORT_CLUSTER_ZK_SESSION_TIMEOUT_MS:3000}
+        connection-timeout-ms: ${ROSEBOARD_TRANSPORT_CLUSTER_ZK_CONNECTION_TIMEOUT_MS:3000}
+        retry-interval-ms: ${ROSEBOARD_TRANSPORT_CLUSTER_ZK_RETRY_INTERVAL_MS:3000}
+        max-retries: ${ROSEBOARD_TRANSPORT_CLUSTER_ZK_MAX_RETRIES:3}
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  type-handlers-package: com.roseboard.infrastructure

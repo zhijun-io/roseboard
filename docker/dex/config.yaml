@@ -1,0 +1,18 @@
+issuer: http://127.0.0.1:5556/dex
+storage:
+  type: memory
+web:
+  http: 0.0.0.0:5556
+staticClients:
+  - id: roseboard-dex
+    secret: roseboard-dex-secret
+    name: Roseboard integration test
+    redirectURIs:
+      - http://127.0.0.1:8080/login/oauth2/code/roseboard
+      - http://localhost:4200/login/oauth2/code/roseboard
+enablePasswordDB: true
+staticPasswords:
+  - email: integration@roseboard.local
+    hash: "$2a$10$ggjrEfnvucHdJOHt6/mRgOicAp6EfvNwDy80Ytlo/tJqd5bbyHNaC"
+    username: integration
+    userID: "00000000-0000-0000-0000-000000000001"

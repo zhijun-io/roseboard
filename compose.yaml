@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: roseboard
+      POSTGRES_USER: roseboard
+      POSTGRES_PASSWORD: roseboard
+    ports:
+      - "5432:5432"
+    volumes:
+      - roseboard-postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U roseboard -d roseboard"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  valkey:
+    image: valkey/valkey:8
+    ports:
+      - "6379:6379"
+
+  mqtt:
+    image: eclipse-mosquitto:2
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./docker/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - roseboard-mosquitto-data:/mosquitto/data
+      - roseboard-mosquitto-log:/mosquitto/log
+
+  mailpit:
+    image: axllent/mailpit:v1.27
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  fake-sms:
+    build:
+      context: ./docker/fake-sms
+    environment:
+      PORT: "8080"
+      API_KEY: test-only-key
+      MAX_MESSAGES: "1000"
+    ports:
+      - "127.0.0.1:18080:8080"
+
+volumes:
+  roseboard-postgres-data:
+  roseboard-mosquitto-data:
+  roseboard-mosquitto-log:

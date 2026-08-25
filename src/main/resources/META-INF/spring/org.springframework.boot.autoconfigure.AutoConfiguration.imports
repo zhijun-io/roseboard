@@ -1,0 +1,10 @@
+com.roseboard.infrastructure.queue.QueueAutoConfiguration
+com.roseboard.infrastructure.notification.NotificationAutoConfiguration
+com.roseboard.infrastructure.security.SecurityAutoConfiguration
+com.roseboard.infrastructure.security.JwtAutoConfiguration
+com.roseboard.infrastructure.security.SecurityOAuth2AutoConfiguration
+com.roseboard.tenant.usage.TenantUsageAutoConfiguration
+com.roseboard.infrastructure.cluster.ClusterConfiguration
+com.roseboard.infrastructure.transport.TransportConfiguration
+com.roseboard.infrastructure.transport.cluster.TransportClusterConfiguration
+com.roseboard.infrastructure.transport.mqtt.MqttTransportConfiguration
