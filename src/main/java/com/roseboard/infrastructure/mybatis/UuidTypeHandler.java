@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 @MappedTypes(UUID.class)
-public class MybatisUuidTypeHandler extends BaseTypeHandler<UUID> {
+public class UuidTypeHandler extends BaseTypeHandler<UUID> {
     @Override
     public void setNonNullParameter(PreparedStatement statement, int index, UUID value, JdbcType jdbcType)
             throws SQLException {

@@ -24,6 +24,10 @@ public class Jackson3JsonbTypeHandler extends Jackson3TypeHandler {
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, Object parameter, JdbcType jdbcType)
             throws SQLException {
+        if (parameter == null) {
+            ps.setNull(i, JdbcType.OTHER.TYPE_CODE);
+            return;
+        }
         PGobject json = new PGobject();
         json.setType("jsonb");
         json.setValue(toJson(parameter));
