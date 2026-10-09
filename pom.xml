@@ -22,7 +22,7 @@
         <mybatis-plus.version>3.5.17</mybatis-plus.version>
         <springdoc.version>3.0.3</springdoc.version>
         <protobuf.version>4.30.2</protobuf.version>
-        <testcontainers.version>1.21.3</testcontainers.version>
+        <testcontainers.version>1.21.4</testcontainers.version>
         <aspectj.version>1.9.25.1</aspectj.version>
     </properties>
 
